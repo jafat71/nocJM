@@ -8,14 +8,20 @@ interface CheckServiceUseCase {
 type SuccessCallback =( () => void ) | undefined
 type ErrorCallback = ((error: string) => void) | undefined
 
-export class CheckService implements CheckServiceUseCase{
+export class CheckServiceMultiple implements CheckServiceUseCase{
 
     constructor(
-        private readonly logRepository: LogRepository,
+        private readonly logRepository: LogRepository[],
         private readonly successCallback: SuccessCallback,
         private readonly errorCallback: ErrorCallback
     ){}
     
+    private callLogs(log: LogEntity){
+        this.logRepository.forEach(logRepo=>{
+            logRepo.saveLog(log)
+        })
+    }
+
     public async execute(url: string) : Promise<boolean>{
 
         const logEntityOptions =  {
@@ -31,14 +37,14 @@ export class CheckService implements CheckServiceUseCase{
             }
 
             const log = new LogEntity(logEntityOptions)
-            this.logRepository.saveLog( log )
+            this.callLogs( log )
             this.successCallback && this.successCallback()
             return true
         }catch(error){
             const errorMsg = `${ url } not working: Error: ${ error }`
             logEntityOptions.message = errorMsg
             const log = new LogEntity(logEntityOptions)
-            this.logRepository.saveLog(log)
+            this.callLogs( log )
             this.errorCallback && this.errorCallback(errorMsg)
             return false
         }
