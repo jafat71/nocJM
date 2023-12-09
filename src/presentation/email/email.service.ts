@@ -10,7 +10,7 @@ export interface SendMailOptions {
     attachments?: Attachment[]
 }
 
-interface Attachment {
+export interface Attachment {
     filename: string;
     path: string
 }

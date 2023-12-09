@@ -8,4 +8,6 @@
    '''
    docker-compose up -d 
    '''
-5. execute "npm run dev"
+5. execute "npx prisma migrate dev"
+6. execute "npm run dev"
+7. 

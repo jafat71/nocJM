@@ -35,7 +35,7 @@ export class LogEntity {
         const {message, level, createdAt, origin} = JSON.parse(json)
         //if(!message) throw new Error('Message is required')
 
-        const log = new LogEntity({message, level, origin ,createdAt})
+        const log = new LogEntity({message, level, origin ,createdAt: new Date(createdAt)})
         log.createdAt = new Date(createdAt)
         return log
     }
